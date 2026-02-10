@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Casas, lotes, fincas, apartamentos y vehículos en Fusagasugá y Cundinamarca. Compre y venda propiedades con confianza.">
+    <title>Compre y Venda en Fusagasugá y Cundinamarca | Bienes Raíces y Vehículos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f8f9fa; color: #2c3e50; line-height: 1.6; }
+        
+        header { 
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.9) 0%, rgba(42, 82, 152, 0.9) 100%), 
+                      url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1600') center/cover;
+            color: white; 
+            text-align: center; 
+            padding: 100px 20px; 
+            position: relative;
+        }
+        header h1 { 
+            font-size: 3em; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease;
+        }
+        header p { 
+            font-size: 1.4em; 
+            opacity: 0.95; 
+            max-width: 700px; 
+            margin: 0 auto;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+        .location-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .nav-categories { 
+            background: white; 
+            padding: 20px; 
+            text-align: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .nav-categories button {
+            background: #ecf0f1;
+            border: none;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .nav-categories button:hover, .nav-categories button.active {
+            background: #1e3c72;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.3em;
+            color: #1e3c72;
+            margin: 60px 0 40px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: #e74c3c;
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .properties-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+            gap: 30px; 
+            margin-bottom: 60px;
+        }
+        
+        .property-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid #e0e0e0;
+        }
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .badge-venta { background: #e74c3c; color: white; }
+        .badge-alquiler { background: #27ae60; color: white; }
+        .badge-vehiculo { background: #f39c12; color: white; }
+        
+        .property-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #ddd, #eee);
+        }
+        
+        .property-info { padding: 25px; }
+        .property-type {
+            color: #1e3c72;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .property-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .property-location {
+            color: #555;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+        
+        .features {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+            flex-wrap: wrap;
+        }
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #555;
+            font-size: 0.9em;
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 15px;
+        }
+        
+        .price-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        .price {
+            font-size: 1.8em;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .price-small {
+            font-size: 0.5em;
+            color: #7f8c8d;
+            font-weight: normal;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        .services {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 20px;
+            margin: 60px -20px;
+            text-align: center;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 40px auto 0;
+        }
+        .service-item {
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .service-item h3 { font-size: 1.5em; margin-bottom: 10px; }
+        .service-item p { opacity: 0.9; }
+        
+        footer {
+            background: #1a252f;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .footer-content { max-width: 800px; margin: 0 auto; }
+        .footer-content h2 { 
+            color: #fff;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .footer-contact {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            font-size: 1.1em;
+        }
+        .footer-contact div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .social-links {
+            margin-top: 30px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 15px;
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .social-links a:hover { transform: translateY(-5px); }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25d366;
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            text-decoration: none;
+            box-shadow: 0 5px 25px rgba(37,211,102,0.5);
+            transition: all 0.3s;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 35px rgba(37,211,102,0.7);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            header p { font-size: 1.1em; }
+            .properties-grid { grid-template-columns: 1fr; }
+            .price { font-size: 1.5em; }
+            .price-container { flex-direction: column; align-items: flex-start; }
+            .nav-categories button { padding: 10px 15px; font-size: 0.85em; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏡 Compre y Venda</h1>
+        <p>Casas, Lotes, Fincas, Apartamentos y Vehículos en Fusagasugá y toda Cundinamarca</p>
+        <div class="location-badge">📍 Fusagasugá, Cundinamarca, Colombia</div>
+    </header>
+
+    <nav class="nav-categories">
+        <button class="active" onclick="filterProperties('todos')">📋 Todos</button>
+        <button onclick="filterProperties('casa')">🏠 Casas</button>
+        <button onclick="filterProperties('apartamento')">🏢 Apartamentos</button>
+        <button onclick="filterProperties('lote')">🌳 Lotes</button>
+        <button onclick="filterProperties('finca')">🚜 Fincas</button>
+        <button onclick="filterProperties('vehiculo')">🚗 Vehículos</button>
+    </nav>
+
+    <div class="container">
+
+        <h2 class="section-title" id="casas">🏠 Casas en Fusagasugá y Cundinamarca</h2>
+        <div class="properties-grid">
+            
+            <div class="property-card" data-category="casa">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800" alt="Casa Fusagasugá" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Casa Familiar</div>
+                    <h3 class="property-title">Casa Campestre en Fusagasugá</h3>
+                    <div class="property-location">📍 Vereda La Esperanza, Fusagasugá</div>
+                    <div class="features">
+                        <span class="feature">🛏️ 4 Habs</span>
+                        <span class="feature">🚿 3 Baños</span>
+                        <span class="feature">📐 300 m²</span>
+                        <span class="feature">🌳 1,000 m² terreno</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$450,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Casa%20Campestre%20en%20Fusagasugá%20por%20$450,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="casa">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800" alt="Casa Cundinamarca" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Casa Urbana</div>
+                    <h3 class="property-title">Casa en Conjunto Cerrado</h3>
+                    <div class="property-location">📍 Urbanización Portal de Fusagasugá</div>
+                    <div class="features">
+                        <span class="feature">🛏️ 3 Habs</span>
+                        <span class="feature">🚿 2 Baños</span>
+                        <span class="feature">📐 180 m²</span>
+                        <span class="feature">🚗 Parqueo privado</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$320,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Casa%20en%20Conjunto%20Cerrado%20por%20$320,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="casa">
+                <span class="badge badge-alquiler">En Alquiler</span>
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800" alt="Casa alquiler" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Casa Familiar</div>
+                    <h3 class="property-title">Casa para Arriendo Anual</h3>
+                    <div class="property-location">📍 Centro de Fusagasugá, cerca a la plaza</div>
+                    <div class="features">
+                        <span class="feature">🛏️ 3 Habs</span>
+                        <span class="feature">🚿 2 Baños</span>
+                        <span class="feature">📐 150 m²</span>
+                        <span class="feature">🛋️ Semi-amueblada</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$1,200,000 <span class="price-small">/mes</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Casa%20en%20arriendo%20por%20$1,200,000/mes" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="section-title" id="apartamentos">🏢 Apartamentos</h2>
+        <div class="properties-grid">
+
+            <div class="property-card" data-category="apartamento">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800" alt="Apartamento Fusagasugá" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Apartamento Nuevo</div>
+                    <h3 class="property-title">Apartamento en Edificio Nuevo</h3>
+                    <div class="property-location">📍 Zona Residencial, Fusagasugá</div>
+                    <div class="features">
+                        <span class="feature">🛏️ 3 Habs</span>
+                        <span class="feature">🚿 2 Baños</span>
+                        <span class="feature">📐 95 m²</span>
+                        <span class="feature">🏋️ Gimnasio</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$280,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20el%20Apartamento%20nuevo%20por%20$280,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="apartamento">
+                <span class="badge badge-alquiler">En Alquiler</span>
+                <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800" alt="Apartamento arriendo" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Apartamento Amueblado</div>
+                    <h3 class="property-title">Apartamento Amoblado Centro</h3>
+                    <div class="property-location">📍 Centro de Fusagasugá, cerca a todo</div>
+                    <div class="features">
+                        <span class="feature">🛏️ 2 Habs</span>
+                        <span class="feature">🚿 2 Baños</span>
+                        <span class="feature">📐 70 m²</span>
+                        <span class="feature">🛋️ Totalmente amueblado</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$900,000 <span class="price-small">/mes</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20el%20Apartamento%20amoblado%20por%20$900,000/mes" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="section-title" id="lotes">🌳 Lotes y Terrenos</h2>
+        <div class="properties-grid">
+
+            <div class="property-card" data-category="lote">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800" alt="Lote Fusagasugá" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Lote Urbano</div>
+                    <h3 class="property-title">Lote en Zona de Expansión</h3>
+                    <div class="property-location">📍 Vía a Pasca, Fusagasugá</div>
+                    <div class="features">
+                        <span class="feature">📐 300 m²</span>
+                        <span class="feature">⚡ Servicios públicos</span>
+                        <span class="feature">🛣️ Vía pavimentada</span>
+                        <span class="feature">📈 Alta plusvalía</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$85,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20el%20Lote%20de%20300m²%20por%20$85,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="lote">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800" alt="Lote campestre" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Lote Campestre</div>
+                    <h3 class="property-title">Lote Campestre con Vista</h3>
+                    <div class="property-location">📍 Vereda Sutamarchán, Cundinamarca</div>
+                    <div class="features">
+                        <span class="feature">📐 2,000 m²</span>
+                        <span class="feature">🌄 Vista panorámica</span>
+                        <span class="feature">💧 Agua natural</span>
+                        <span class="feature">🌿 Zona campestre</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$120,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20el%20Lote%20Campestre%20de%202,000m²%20por%20$120,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="section-title" id="fincas">🚜 Fincas en Cundinamarca</h2>
+        <div class="properties-grid">
+
+            <div class="property-card" data-category="finca">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1500076656116-558758c991c1?w=800" alt="Finca productiva" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Finca Productiva</div>
+                    <h3 class="property-title">Finca de Aguacate y Café</h3>
+                    <div class="property-location">📍 Zona Rural, Fusagasugá</div>
+                    <div class="features">
+                        <span class="feature">📐 2 Hectáreas</span>
+                        <span class="feature">🏠 Casa de campo</span>
+                        <span class="feature">🥑 Cultivo de aguacate</span>
+                        <span class="feature">💧 Río privado</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$650,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Finca%20de%20Aguacate%20de%202%20hectáreas%20por%20$650,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="finca">
+                <span class="badge badge-venta">En Venta</span>
+                <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800" alt="Finca recreativa" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Finca Recreativa</div>
+                    <h3 class="property-title">Finca de Descanso con Piscina</h3>
+                    <div class="property-location">📍 Cerca a Fusagasugá, 30 min de Bogotá</div>
+                    <div class="features">
+                        <span class="feature">📐 5,000 m²</span>
+                        <span class="feature">🏡 Casa principal + 2 cabañas</span>
+                        <span class="feature">🏊 Piscina privada</span>
+                        <span class="feature">🌲 Zona BBQ y kiosco</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$480,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Finca%20Recreativa%20con%20Piscina%20por%20$480,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h2 class="section-title" id="vehiculos">🚗 Vehículos en Fusagasugá</h2>
+        <div class="properties-grid">
+
+            <div class="property-card" data-category="vehiculo">
+                <span class="badge badge-vehiculo">Vehículo</span>
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800" alt="Camioneta" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Camioneta 4x4</div>
+                    <h3 class="property-title">Toyota Hilux 2019 4x4 Diesel</h3>
+                    <div class="property-location">📍 Fusagasugá, único dueño, impecable</div>
+                    <div class="features">
+                        <span class="feature">⛽ Diesel</span>
+                        <span class="feature">🔄 Mecánica 6vel</span>
+                        <span class="feature">📊 45,000 km</span>
+                        <span class="feature">📋 Soat y tecno al día</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$95,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Toyota%20Hilux%202019%20por%20$95,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="vehiculo">
+                <span class="badge badge-vehiculo">Vehículo</span>
+                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800" alt="Sedan" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Sedán Familiar</div>
+                    <h3 class="property-title">Mazda 3 2021 Automático</h3>
+                    <div class="property-location">📍 Fusagasugá, servicios en agencia</div>
+                    <div class="features">
+                        <span class="feature">⛽ Gasolina</span>
+                        <span class="feature">🔄 Automático</span>
+                        <span class="feature">📊 28,000 km</span>
+                        <span class="feature">🎨 Rojo metálico</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$62,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20el%20Mazda%203%202021%20por%20$62,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-card" data-category="vehiculo">
+                <span class="badge badge-vehiculo">Vehículo</span>
+                <img src="https://images.unsplash.com/photo-1551830820-330a71b99659?w=800" alt="Camioneta familiar" class="property-image">
+                <div class="property-info">
+                    <div class="property-type">Camioneta SUV</div>
+                    <h3 class="property-title">Renault Duster 2020 4x2</h3>
+                    <div class="property-location">📍 Fusagasugá, perfecta estado</div>
+                    <div class="features">
+                        <span class="feature">⛽ Gasolina</span>
+                        <span class="feature">🔄 Mecánica 5vel</span>
+                        <span class="feature">📊 35,000 km</span>
+                        <span class="feature">👨‍👩‍👧‍👦 Espaciosa</span>
+                    </div>
+                    <div class="price-container">
+                        <div class="price">$48,000,000 <span class="price-small">COP</span></div>
+                        <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20la%20Renault%20Duster%202020%20por%20$48,000,000" class="btn btn-whatsapp" target="_blank">💬 Info</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="services">
+            <h2 style="font-size: 2.5em; margin-bottom: 10px;">¿Qué necesitas?</h2>
+            <p style="font-size: 1.2em; opacity: 0.9;">Te ayudamos a comprar, vender o alquilar</p>
+            <div class="services-grid">
+                <div class="service-item">
+                    <h3>🏠 Quiero Vender</h3>
+                    <p>Publicamos tu propiedad o vehículo gratis. Llegamos a miles de compradores en Fusagasugá y Cundinamarca.</p>
+                </div>
+                <div class="service-item">
+                    <h3>🔍 Quiero Comprar</h3>
+                    <p>Te ayudamos a encontrar la mejor opción según tu presupuesto y necesidades. Asesoría gratuita.</p>
+                </div>
+                <div class="service-item">
+                    <h3>🤝 Quiero Alquilar</h3>
+                    <p>Conectamos propietarios con arrendatarios de confianza. Gestión completa del proceso.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <h2>🏡 Compre y Venda en Fusagasugá y Cundinamarca</h2>
+            <p>Tu aliado de confianza para comprar, vender y alquilar propiedades y vehículos en la región. Más de 5 años conectando familias con su inversión ideal.</p>
+            <div class="footer-contact">
+                <div>📱 +57 300 123 4567</div>
+                <div>📧 contacto@compreyvendafusa.com</div>
+                <div>📍 Fusagasugá, Cundinamarca, Colombia</div>
+            </div>
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="TikTok">🎵</a>
+            </div>
+            <p style="margin-top: 30px; opacity: 0.7; font-size: 0.9em;">© 2024 Compre y Venda en Fusagasugá y Cundinamarca. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/573001234567?text=Hola,%20vi%20su%20página%20de%20Compre%20y%20Venda%20en%20Fusagasugá%20y%20quiero%20más%20información" class="whatsapp-float" target="_blank" title="Chatear por WhatsApp">
+        💬
+    </a>
+
+    <script>
+        function filterProperties(category) {
+            document.querySelectorAll('.nav-categories button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('.property-card');
+            
+            cards.forEach(card => {
+                if (category === 'todos' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeInDown 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            if (category !== 'todos') {
+                const section = document.getElementById(category + 's');
+                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+    </script>
+
+</body>
+</html>
